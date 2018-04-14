@@ -23,5 +23,15 @@ pipeline {
                 sh 'npm --version'
             }
         }
+         stage('run') {
+            agent { 
+                docker { 
+                    image 'openjdk:8-jre' 
+                } 
+             }
+            steps {
+                sh 'java -jar target/my-app-1.0-SNAPSHOT.jar'
+            }
+        }
     }
 }
