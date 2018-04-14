@@ -1,29 +1,18 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent none
     stages {
-        stage('Build') {
+        stage('build') {
+            agent { docker { image 'maven:3-jdk-8-slim' } }
             steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh 'mvn package'
+                sh 'pwd'
+                sh 'ls -l'
             }
         }
-        stage('Test') {
+        stage('fuck') {
+            agent { docker { image 'node:6.3' } }
             steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh 'npm --version'
             }
         }
     }
